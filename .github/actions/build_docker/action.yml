@@ -39,7 +39,7 @@ runs:
         images: ${{ inputs.image_name }}
         # https://github.com/docker/metadata-action/tree/master?tab=readme-ov-file#priority-attribute
         # The default priority of sha is 100, and for custom/raw tags is 200. The highest the most priority.
-        # We want the sha tag to be the one used for the OCI label and the version output, so we set the priority of the custom date tag to the lowest.
+        # We want the sha tag to be the one used for the OCI label and the version output, so we set the priority of the custom date tag to lower, followed by the PR number tag.
         tags: |
           type=sha,priority=100
           ${{ inputs.version }},priority=1
