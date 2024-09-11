@@ -12,9 +12,9 @@
     "name": "GCP"
   },
   "tenant_metadata": {
-    "gke_cluster_name": "gke-sandbox-uc1-a",
+    "gke_cluster_name": "gke-pubplat-ascn-dev-uc1-a",
     "region": "us-central1",
-    "project": "gke-sandbox-2809"
+    "project": "ascn-dev-base-957a"
   },
   "vars": {
     "secretStore": "cluster-secrets",
