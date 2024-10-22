@@ -3,7 +3,6 @@
     "environment": "dev",
     "product": "pubplat",
     "project": "opserver",
-    "tenant": "sandbox",
     "releaseTag": "pr-10"
   },
   "runtime": {
@@ -11,11 +10,6 @@
     "local": false,
     "name": "GCP"
   },
-  "tenant_metadata": {
-    "gke_cluster_name": "",
-    "region": "",
-    "project": ""
-  },  
   "deploymentDiscovery": {
     "deploymentGroupFilter": "labels.env=dev AND labels.project=base AND labels.product=pubplat AND labels.instance=ascn-dev",
     "deploymentTargetFilter": "resourceLabels.deployment_target=true"

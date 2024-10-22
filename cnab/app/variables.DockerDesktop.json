@@ -3,18 +3,12 @@
     "environment": "local",
     "product": "pubplat",
     "project": "opserver",
-    "tenant": "local",
     "releaseTag": "local"
   },
   "runtime": {
     "cd": false,
     "local": true,
     "name": "DockerDesktop"
-  },
-  "tenant_metadata": {
-    "gke_cluster_name": "",
-    "region": "",
-    "project": ""
   },
   "vars": {
     "secretStore": "cluster-secrets",
