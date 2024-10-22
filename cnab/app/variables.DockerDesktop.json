@@ -11,7 +11,7 @@
     "name": "DockerDesktop"
   },
   "vars": {
-    "secretStore": "cluster-secrets",
+    "secretStore": "fakeopserversecretstore",
     "imagePullPolicy": "IfNotPresent",
     "replicaCount": "1",
     "aspnetcoreEnvironment": "Local",
