@@ -74,7 +74,7 @@ jobs:
         run: |
           octoSpaceId="Spaces-1"
           octoProjectId="Projects-2241"
-          environmentId="${{ github.ref_name == 'main' && 'Dev' || 'Sandbox' }}"
+          environmentId="${{ github.ref_name == 'main' && 'main-test' || 'ascn-dev' }}"
 
           dotnet octo deploy-release --project=$octoProjectId --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
           --server=${{ vars.OCTOPUS_CLOUD_URL }} --apiKey=${{ secrets.OCTOPUS_CLOUD_API_KEY }} --deployTo=$environmentId
