@@ -3,7 +3,6 @@
     "environment": "local",
     "product": "pubplat",
     "project": "opserver",
-    "tenant": "local",
     "releaseTag": "local"
   },
   "runtime": {
@@ -11,13 +10,8 @@
     "local": true,
     "name": "DockerDesktop"
   },
-  "tenant_metadata": {
-    "gke_cluster_name": "",
-    "region": "",
-    "project": ""
-  },
   "vars": {
-    "secretStore": "cluster-secrets",
+    "secretStore": "fakeopserversecretstore",
     "imagePullPolicy": "IfNotPresent",
     "replicaCount": "1",
     "aspnetcoreEnvironment": "Local",

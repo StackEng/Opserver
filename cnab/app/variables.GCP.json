@@ -3,19 +3,13 @@
     "environment": "dev",
     "product": "pubplat",
     "project": "opserver",
-    "tenant": "sandbox",
-    "releaseTag": "pr-10"
+    "releaseTag": "pr-12"
   },
   "runtime": {
     "cd": false,
     "local": false,
     "name": "GCP"
   },
-  "tenant_metadata": {
-    "gke_cluster_name": "",
-    "region": "",
-    "project": ""
-  },  
   "deploymentDiscovery": {
     "deploymentGroupFilter": "labels.env=dev AND labels.project=base AND labels.product=pubplat AND labels.instance=ascn-dev",
     "deploymentTargetFilter": "resourceLabels.deployment_target=true"
@@ -37,7 +31,7 @@
     "isHADRPrimary": "true",
     "podDisruptionBudgetMinAvailable": "1",
     "opserverSettings": {
-      "hostUrl": "opserver.sandbox.int.gcp.stackoverflow.net",
+      "hostUrl": "opserver.ascn-dev.int.gcp.stackoverflow.net",
       "sql": [
         { "name": "db.db" }
       ],

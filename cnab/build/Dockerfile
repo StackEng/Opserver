@@ -1,4 +1,4 @@
-FROM cr.stackoverflow.software/so-pubplat-cnab:2024.9.25.214002-238.1@sha256:bd33fc10fb6f59e328d7210a6fa48cae470f5d25ce6da115f6c877e42f9204f3
+FROM cr.stackoverflow.software/so-pubplat-cnab:2024.10.16.174409-276.1@sha256:36cf26cd2d2ea251ce46edcc966174ab1ed95ccf2818cdc763ba58a384328177
     
 COPY ./cnab/app /cnab/app
 COPY ./charts /cnab/app/charts
