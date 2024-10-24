@@ -3,7 +3,7 @@
     "environment": "dev",
     "product": "pubplat",
     "project": "opserver",
-    "releaseTag": "pr-10"
+    "releaseTag": "pr-12"
   },
   "runtime": {
     "cd": false,
