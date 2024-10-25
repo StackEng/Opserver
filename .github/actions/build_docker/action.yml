@@ -43,7 +43,7 @@ runs:
         tags: |
           type=sha,priority=100
           ${{ inputs.version }},priority=1
-          ${{ github.ref_name == 'main' && '' || format('pr-{0}', github.event.pull_request.number) }}
+          type=ref,event=pr
         flavor: latest=false
 
     - name: Login to Docker Registry - prod
