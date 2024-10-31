@@ -66,7 +66,7 @@ namespace Opserver
                     _configuration.GetSection("Exceptional"),
                     settings =>
                     {
-                        settings.UseExceptionalPageOnThrow = true;
+                        settings.UseExceptionalPageOnThrow = false;
                         settings.DataIncludeRegex = new Regex("^(Redis|Elastic|ErrorLog|Jil)", RegexOptions.Singleline | RegexOptions.Compiled);
                         settings.OnAfterLog += ExceptionalAfterLog;
                         settings.GetCustomData = (ex, data) =>
