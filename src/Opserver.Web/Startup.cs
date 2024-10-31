@@ -208,17 +208,6 @@ namespace Opserver
                               }
                           }
                       })
-                      .UseExceptionHandler(errorApp =>
-                      {
-                          errorApp.Run(ctx =>
-                          {
-                              var logger = ctx.RequestServices.GetRequiredService<ILogger<Startup>>();
-                              var exception = ctx.Features.Get<IExceptionHandlerFeature>().Error;
-                              logger.LogError(exception, exception.Message);
-
-                              return Task.CompletedTask;
-                          });
-                      })
                       .UseExceptional()
                       .UseRouting()
                       .UseMiniProfiler()
@@ -264,7 +253,8 @@ namespace Opserver
         {
             if (args != null)
             {
-                Serilog.Log.Logger.Error(args.Error.Exception, "{ErrorMessage}", args.Error.Message);
+                string message = args.Error.Message;
+                Serilog.Log.Error(args.Error.Exception, "{Message}", message);
             }
         }
     }
