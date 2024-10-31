@@ -17,7 +17,7 @@
     <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
     <PackageReference Include="Serilog.Expressions" Version="5.0.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="6.0.0" />
     <Reference Include="System.Management" />
