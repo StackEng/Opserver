@@ -1,6 +1,7 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -20,6 +21,8 @@ using Microsoft.Net.Http.Headers;
 using Opserver.Data;
 using Opserver.Helpers;
 using Opserver.Security;
+using Serilog;
+using StackExchange.Exceptional;
 using StackExchange.Profiling;
 
 namespace Opserver
@@ -63,8 +66,9 @@ namespace Opserver
                     _configuration.GetSection("Exceptional"),
                     settings =>
                     {
-                        settings.UseExceptionalPageOnThrow = true;
+                        settings.UseExceptionalPageOnThrow = false;
                         settings.DataIncludeRegex = new Regex("^(Redis|Elastic|ErrorLog|Jil)", RegexOptions.Singleline | RegexOptions.Compiled);
+                        settings.OnAfterLog += ExceptionalAfterLog;
                         settings.GetCustomData = (ex, data) =>
                         {
                             // everything below needs a context
@@ -240,9 +244,18 @@ namespace Opserver
                                 AllowCachingResponses = false,
                                 Predicate =
                                     _ => false // We don't use any healthchecks for liveliness, just that the app responds
-                     });
+                            });
             NavTab.ConfigureAll(modules); // TODO: UseNavTabs() or something
             Cache.Configure(settings);
+        }
+
+        private void ExceptionalAfterLog(object sender, ErrorAfterLogEventArgs args)
+        {
+            if (args != null)
+            {
+                string message = args.Error.Message;
+                Serilog.Log.Error(args.Error.Exception, "{Message}", message);
+            }
         }
     }
 }
