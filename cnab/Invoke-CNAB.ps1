@@ -7,7 +7,7 @@ param (
     $RunAsContainer = $false,
     [ValidateSet("GCP", "DockerDesktop")]
     [string]
-    $Target = "DockerDesktop",
+    $Target = "GCP",
     [bool]
     $DownloadLocalScriptsForLocalDebugging = $true
 )
