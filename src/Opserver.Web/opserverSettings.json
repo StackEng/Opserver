@@ -1,17 +1,22 @@
 ﻿{
   "ForwardedHeaders": {
-    "KnownNetworks": ["10.0.0.0/16"],
+    "KnownNetworks": [ "10.0.0.0/16" ],
     "KnownProxies": [],
     "ForwardedHeaders": "All"
+  },
+  "security": {
+    "adminGroups": "",
+    "viewGroups": "",
+    "provider": "EveryonesAnAdmin"
   },
   "Modules": {
     /* Configuration for the SQL Server dashboard */
     "Sql": {
-      //"defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
-      //"refreshIntervalSeconds": 30,
-      //"instances": [
-      //  { "name": "localhost" }
-      //]
+      "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
+      "refreshIntervalSeconds": 30,
+      "instances": [
+        { "name": "localhost" }
+      ]
     },
     /* Configuration for the Redis dashboard */
     "Redis": {
@@ -38,13 +43,13 @@
     },
     /* Configuration for the Exceptions dashboard */
     "Exceptions": {
-      //"stores": [
-      //  {
-      //    "name": "Local",
-      //    "queryTimeoutMs": 2000,
-      //    "connectionString": "Server=.;Database=Local.Exceptions;Integrated Security=SSPI;"
-      //  }
-      //],
+      "stores": [
+        {
+          "name": "Local",
+          "queryTimeoutMs": 2000,
+          "connectionString": "Server=.;Database=Local.Exceptions;Integrated Security=SSPI;"
+        }
+      ],
       "stackTraceReplacements": [
         {
           "name": "github",
