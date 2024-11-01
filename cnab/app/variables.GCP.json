@@ -3,7 +3,7 @@
     "environment": "dev",
     "product": "pubplat",
     "project": "opserver",
-    "releaseTag": "pr-13"
+    "releaseTag": "2024.10.31.104"
   },
   "runtime": {
     "cd": false,
@@ -19,7 +19,7 @@
     "imagePullPolicy": "Always",
     "replicaCount": "1",
     "aspnetcoreEnvironment": "Dev",
-    "exceptionalStoreType": "Sql",
+    "exceptionalStoreType": "SQL",
     "exceptionalDbName": "Dev.Exceptions",
     "datadogAgentHost": "127.0.0.1",
     "datadogAgentPort": "8125",
