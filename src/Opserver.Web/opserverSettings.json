@@ -1,17 +1,20 @@
 ﻿{
   "ForwardedHeaders": {
-    "KnownNetworks": ["10.0.0.0/16"],
+    "KnownNetworks": [ "10.0.0.0/16" ],
     "KnownProxies": [],
     "ForwardedHeaders": "All"
+  },
+  "Security": {
+    "Provider": "EveryonesAnAdmin"
   },
   "Modules": {
     /* Configuration for the SQL Server dashboard */
     "Sql": {
-      //"defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
-      //"refreshIntervalSeconds": 30,
-      //"instances": [
-      //  { "name": "localhost" }
-      //]
+      "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;TrustServerCertificate=True",
+      "refreshIntervalSeconds": 30,
+      "instances": [
+        { "name": "localhost" }
+      ]
     },
     /* Configuration for the Redis dashboard */
     "Redis": {

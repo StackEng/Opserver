@@ -22,7 +22,7 @@ WORKDIR /app/src/Opserver.Web
 RUN dotnet publish -c Release -o publish
 
 # Build runtime image
-FROM cr.stackoverflow.software/so-aspnet:6.0-jammy-chiseled AS base
+FROM cr.stackoverflow.software/so-aspnet:6.0-jammy-chiseled-extra AS base
 
 USER $APP_UID
 

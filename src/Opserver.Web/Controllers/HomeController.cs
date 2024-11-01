@@ -14,6 +14,7 @@ using Opserver.Data.Exceptions;
 using Opserver.Data.Elastic;
 using Opserver.Data.HAProxy;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Opserver.Controllers
 {
@@ -151,6 +152,19 @@ namespace Opserver.Controllers
 #pragma warning disable RCS1079 // Throwing of new NotImplementedException.
             throw new NotImplementedException("I AM IMPLEMENTED, I WAS BORN TO THROW ERRORS!");
 #pragma warning restore RCS1079 // Throwing of new NotImplementedException.
+        }
+
+        [Route("assemblies")]
+        public ActionResult Assemblies()
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var result = new System.Text.StringBuilder();
+            foreach (Assembly assembly in assemblies)
+            {
+                result.AppendLine($"{assembly.FullName} - v{assembly.GetName().Version}");
+            }
+
+            return Content(result.ToString());
         }
     }
 }
