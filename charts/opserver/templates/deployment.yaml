@@ -159,7 +159,7 @@ spec:
 
       {{- if hasKey .Values.opserverSettings "sql" }}      
         - name: Modules__Sql__defaultConnectionString
-          value: "Server=$(SQL_EXCEPTIONAL_SERVERNAME);Database=master;User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);"
+          value: "Server=$(SQL_EXCEPTIONAL_SERVERNAME);Database=master;User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);TrustServerCertificate=True"
         {{- range $i, $instance := .Values.opserverSettings.sql }}
         - name: Modules__Sql__instances__{{ $i }}__name
           value: "{{ $instance.name }}"
@@ -169,7 +169,7 @@ spec:
       {{- if hasKey .Values.opserverSettings "exceptions" }}      
         {{- range $i, $instance := .Values.opserverSettings.exceptions }}
         - name: Modules__Exceptions__stores__{{ $i }}__connectionString
-          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);"
+          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);TrustServerCertificate=True"
         {{- end }}
       {{- end }}
 
