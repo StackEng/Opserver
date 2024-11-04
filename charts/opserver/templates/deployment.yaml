@@ -163,7 +163,7 @@ spec:
         {{- end }}
 
         - name: EXCEPTIONAL__STORE__CONNECTIONSTRING
-          value: Server=$(SQL_EXCEPTIONAL_SERVERNAME),1433;Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
+          value: Server=$(SQL_EXCEPTIONAL_SERVERNAME),1433;Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
       {{- end }}
 
       {{- if hasKey .Values.opserverSettings "exceptions" }}      

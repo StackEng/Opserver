@@ -51,7 +51,7 @@ ingress:
   createTlsCert: false
 
 db:
-  ExceptionalDbName: Local.Exceptions
+  exceptionalDbName: Local.Exceptions
 
 opserverExternalSecret:
   name: opserver-secret

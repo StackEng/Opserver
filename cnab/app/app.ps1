@@ -13,12 +13,15 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         tier                    = $environment
         replicaCount            = $vars.vars.replicaCount
         aspnetcoreEnvironment   = $vars.vars.aspnetcoreEnvironment
-        exceptionalDbName       = $vars.vars.exceptionalDbName;
         product                 = "pubplat"
 
+        db                      = @{
+            exceptionalDbName = $vars.vars.exceptionalDbName;
+        }
+        
         images                  = @{
             containerRegistry = "$containerRegistryUrl"
-            opserver         = @{
+            opserver          = @{
                 tag = $releaseTag
             }
         }
@@ -50,8 +53,8 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         kestrel                 = @{
             endPoints = @{
                 http = @{
-                url           = "http://0.0.0.0:8080/"
-                containerPort = "8080"
+                    url           = "http://0.0.0.0:8080/"
+                    containerPort = "8080"
                 }
             }
         }
@@ -65,23 +68,23 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         }
 
         ingress                 = @{
-            className  = "nginx-internal"
-            certIssuer = "letsencrypt-dns-prod"
-            host       = $vars.vars.opserverSettings.hostUrl
-            enabled    = $vars.vars.includeIngress
-            secretName = "opserver-tls"
+            className     = "nginx-internal"
+            certIssuer    = "letsencrypt-dns-prod"
+            host          = $vars.vars.opserverSettings.hostUrl
+            enabled       = $vars.vars.includeIngress
+            secretName    = "opserver-tls"
             createTlsCert = $true
         }
 
         sqlExternalSecret       = @{
-            storeRefName    = $vars.vars.secretStore
+            storeRefName = $vars.vars.secretStore
         }
 
-        opserverExternalSecret       = @{
-            storeRefName    = $vars.vars.secretStore
+        opserverExternalSecret  = @{
+            storeRefName = $vars.vars.secretStore
         }
 
-        opserverSettings       = $vars.vars.opserverSettings
+        opserverSettings        = $vars.vars.opserverSettings
 
         adminRolebindingGroupId = $vars.vars.adminRolebindingGroupId
     }
