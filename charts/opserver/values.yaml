@@ -69,10 +69,10 @@ sqlExternalSecret:
   targetName: sql-secret
   remoteRefs:
     sqlStatusSqlServerName: SqlStatusSqlServerName
-    sqlStatusUsername: db-opserver-sql-status-User
-    sqlStatusPassword: db-opserver-sql-status-Password
+    sqlStatusUsername: db-Opserver-Sql-Status-User
+    sqlStatusPassword: db-Opserver-Sql-Status-Password
     exceptionalServerName: ExceptionsSqlServerName
-    exceptionalUsername: db-exceptions-User
-    exceptionalPassword: db-exceptions-Password
+    exceptionalUsername: db-Exceptions-User
+    exceptionalPassword: db-Exceptions-Password
 
 nodeScheduling: {}
