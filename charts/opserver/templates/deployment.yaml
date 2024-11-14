@@ -97,23 +97,6 @@ spec:
 
         - name: TMPDIR #tell OS to use our read-write volume mount as its temp directory
           value: "/mnt/tmp"
-
-        - name: SQL_EXCEPTIONAL_SERVERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: exceptionalServername
-        - name: SQL_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: exceptionalUsername
-        - name: SQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: exceptionalPassword
-
         - name: Security__Provider
           value: {{ .Values.opserverSettings.security.provider }}
 
@@ -155,22 +138,57 @@ spec:
 {{- end }}
 
       {{- if hasKey .Values.opserverSettings "sql" }}      
+        - name: SQL_STATUS_SERVERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusSqlServerName }}
+
+        - name: SQL_STATUS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusUsername }}
+        - name: SQL_STATUS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusPassword }}
+
         - name: Modules__Sql__defaultConnectionString
-          value: "Server=$(SQL_EXCEPTIONAL_SERVERNAME);Database=master;User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);TrustServerCertificate=True"
+          value: "Server=$(SQL_STATUS_SERVERNAME);Database=master;User ID=$(SQL_STATUS_USERNAME);Password=$(SQL_STATUS_PASSWORD);TrustServerCertificate=True"
+
         {{- range $i, $instance := .Values.opserverSettings.sql }}
         - name: Modules__Sql__instances__{{ $i }}__name
           value: "{{ $instance.name }}"
         {{- end }}
-
-        - name: EXCEPTIONAL__STORE__CONNECTIONSTRING
-          value: Server=$(SQL_EXCEPTIONAL_SERVERNAME),1433;Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
       {{- end }}
 
       {{- if hasKey .Values.opserverSettings "exceptions" }}      
+        - name: SQL_EXCEPTIONAL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.exceptionalUsername }}
+        - name: SQL_EXCEPTIONAL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.exceptionalPassword }}
+
         {{- range $i, $instance := .Values.opserverSettings.exceptions }}
         - name: Modules__Exceptions__stores__{{ $i }}__connectionString
-          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_USERNAME);Password=$(SQL_PASSWORD);TrustServerCertificate=True"
+          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);TrustServerCertificate=True"
         {{- end }}
+
+        - name: SQL_EXCEPTIONAL_SERVERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.exceptionalServerName }}
+
+        - name: EXCEPTIONAL__STORE__CONNECTIONSTRING
+        value: Server=$(SQL_EXCEPTIONAL_SERVERNAME),1433;Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
       {{- end }}
 
       topologySpreadConstraints:

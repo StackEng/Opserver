@@ -3,7 +3,7 @@
     "environment": "dev",
     "product": "pubplat",
     "project": "opserver",
-    "releaseTag": "2024.11.4.107"
+    "releaseTag": "pr-18"
   },
   "runtime": {
     "cd": false,
