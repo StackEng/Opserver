@@ -68,8 +68,11 @@ sqlExternalSecret:
   storeRefName: fakeopserversecretstore
   targetName: sql-secret
   remoteRefs:
+    sqlStatusSqlServerName: SqlStatusSqlServerName
+    sqlStatusUsername: db-Opserver-Sql-Status-User
+    sqlStatusPassword: db-Opserver-Sql-Status-Password
     exceptionalServerName: ExceptionsSqlServerName
-    exceptionalUsername: db-opserver-User
-    exceptionalPassword: db-opserver-Password
+    exceptionalUsername: db-Exceptions-User
+    exceptionalPassword: db-Exceptions-Password
 
 nodeScheduling: {}
