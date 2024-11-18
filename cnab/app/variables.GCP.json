@@ -12,7 +12,7 @@
   },
   "deploymentDiscovery": {
     "deploymentGroupFilter": "labels.env=dev AND labels.project=base AND labels.product=pubplat AND labels.instance=ascn-dev",
-    "deploymentTargetFilter": "resourceLabels.deployment_target=true"
+    "deploymentTargetFilter": "resourceLabels.deployment_target=true AND resourceLabels.os=linux"
   },
   "vars": {
     "secretStore": "cluster-secrets",
