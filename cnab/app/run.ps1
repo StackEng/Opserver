@@ -36,10 +36,6 @@ $project = $vars.pipeline.name
 $app = Get-AppName
 Write-Output "$($PSStyle.Bold)Installing $app...$($PSStyle.BoldOff)"
 
-function Invoke-WithEcho([string]$cmd) {
-  Write-Output "$($PSStyle.Dim)> $cmd $args$($PSStyle.Reset)"
-  & $cmd @args
-}
 
 Write-Output "Tool versions:"
 Invoke-WithEcho gcloud version 
@@ -51,18 +47,15 @@ Invoke-WithEcho helm diff version
 $action = $env:CNAB_ACTION
 
 Write-MajorStep "Running $action for Environment: $environment - Project: $project in cloud: $($vars.pipeline.cloud)"
-Write-MajorStep "Finding Deployment Group and Deployment Targetr"
-  
-$deploymentTarget = $vars.deployment_targets[0]  
-Write-MajorStep "Connecting to deployment target $($deploymentTarget.id)"
 
+$deploymentTarget = $vars.deployment_targets[0]  
+
+Write-MajorStep "Connecting to deployment target $($deploymentTarget.id)"
 Invoke-Expression $deploymentTarget.vars.k8s_cmd[0]
 
 $releaseTag = $env:BUNDLE_VERSION
 # If the release tag starts with a commit hash plus dash "-", strip the extra characters. This lets us easily test Octopus pr's
 $releaseTag = $releaseTag -replace '([a-z0-9]{40})-.*', '$1'
-
-
 
 $singleRegistry = Is-SingleRegistry
 $containerRegistryDetails = Find-ContainerRegistry $releaseTag $singleRegistry

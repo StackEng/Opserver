@@ -1,4 +1,10 @@
 # Helper functions for the CNAB scripts. dot-source this file (. $PSScriptRoot/utils.ps1) to include it.
+
+function Invoke-WithEcho([string]$cmd) {
+    Write-Output "$($PSStyle.Dim)> $cmd $args$($PSStyle.Reset)"
+    & $cmd @args
+  }
+
 function RequireVars {
     # $Vars must be available before inclusion so we can determine runtime info (e.g. are we running under Octopus?)
     if (!(Test-Path Variable:\vars)) {
@@ -8,7 +14,7 @@ function RequireVars {
 
 function Write-MajorStep {
     [CmdletBinding()]
-    param([Parameter(ValueFromPipeline=$true)][string]$message)
+    param([Parameter(ValueFromPipeline = $true)][string]$message)
     begin {}
     process {
         Write-Host "$($PSStyle.Foreground.BrightCyan)# $message$($PSStyle.Reset)"
@@ -18,7 +24,7 @@ function Write-MajorStep {
 
 function Write-MinorStep {
     [CmdletBinding()]
-    param([Parameter(ValueFromPipeline=$true)][string]$message)
+    param([Parameter(ValueFromPipeline = $true)][string]$message)
     begin {}
     process {
         Write-Host "$($PSStyle.Foreground.BrightMagenta)## $message$($PSStyle.Reset)"
@@ -36,13 +42,12 @@ function Initialize-Logging {
     if ($IsOctopusDeploy) {
         function Write-Warning {
             [CmdletBinding()]
-            param([Parameter(ValueFromPipeline=$true)][string]$message)
+            param([Parameter(ValueFromPipeline = $true)][string]$message)
             begin {
                 Write-Host "##octopus[stdout-warning]"
             }
             process {
-                if($WarningPreference -ne 'SilentlyContinue')
-                {
+                if ($WarningPreference -ne 'SilentlyContinue') {
                     Write-Host $message
                 }
             }
@@ -53,7 +58,7 @@ function Initialize-Logging {
 
         function Write-Verbose {
             [CmdletBinding()]
-            param([Parameter(ValueFromPipeline=$true)][string]$message)
+            param([Parameter(ValueFromPipeline = $true)][string]$message)
             begin {
                 Write-Host "##octopus[stdout-verbose]"
 
@@ -68,7 +73,7 @@ function Initialize-Logging {
 
         function Write-Debug {
             [CmdletBinding()]
-            param([Parameter(ValueFromPipeline=$true)][string]$message)
+            param([Parameter(ValueFromPipeline = $true)][string]$message)
             begin {}
             process {
                 Write-Verbose $message
