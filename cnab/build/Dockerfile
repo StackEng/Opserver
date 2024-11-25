@@ -4,4 +4,7 @@ COPY ./cnab/app /cnab/app
 COPY ./charts /cnab/app/charts
 RUN chmod 755 /cnab/app/run.ps1
 
+ARG BUNDLE_VERSION
+ENV BUNDLE_VERSION=${BUNDLE_VERSION}
+
 CMD ["/cnab/app/run.ps1"]
