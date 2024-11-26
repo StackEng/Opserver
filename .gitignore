@@ -1,8 +1,9 @@
 # These get copied locally when running Invoke-CNAB not in a container
-cnab/app/container-registry-discovery.ps1
-cnab/app/gcp-cluster-discovery.ps1
-cnab/app/run.ps1
-cnab/app/utils.ps1
+# Temporarily including these while building out CNAB v2 support
+# cnab/app/container-registry-discovery.ps1
+# cnab/app/gcp-cluster-discovery.ps1
+# cnab/app/run.ps1
+# cnab/app/utils.ps1
 
 #################
 ## Visual Studio
