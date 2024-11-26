@@ -7,4 +7,4 @@ RUN chmod 755 /cnab/app/run.ps1
 ARG BUNDLE_VERSION
 ENV BUNDLE_VERSION=${BUNDLE_VERSION}
 
-CMD ["/cnab/app/run"]
+CMD ["/cnab/app/run.ps1"]
