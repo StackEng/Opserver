@@ -30,4 +30,5 @@ WORKDIR /app
 COPY --chown=app:app --from=web-publish /app/src/Opserver.Web/publish ./
 COPY --chown=app:app --from=web-publish /app/src/Opserver.Web/opserverSettings.json ./Config/opserverSettings.json
 
+
 ENTRYPOINT ["dotnet", "Opserver.Web.dll"]
