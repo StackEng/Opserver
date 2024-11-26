@@ -16,9 +16,14 @@ trap {
   break
 }
 
-. $PSScriptRoot/app.ps1
-. $PSScriptRoot/utils.ps1
-. $PSScriptRoot/container-registry-discovery.ps1
+$PWD.Path
+(Get-Location).Path
+(Resolve-Path '.').Path
+Get-ChildItem -Path . | ForEach-Object { Write-Output $_.FullName }
+
+. cnab/app/app.ps1
+. cnab/app/utils.ps1
+. cnab/app/container-registry-discovery.ps1
 
 if (-not $env:INSTALLATION_METADATA) {
   throw "INSTALLATION_METADATA is not set"

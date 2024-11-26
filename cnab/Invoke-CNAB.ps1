@@ -158,7 +158,7 @@ if ($RunAsContainer) {
         "-v", "$($MetaJsonPath):/variables.json",
         "--env", "CNAB_ACTION=$Action",
         "--env", "INSTALLATION_METADATA=/variables.json",
-        "--rm", "$CNABImage", "/cnab/app/run.ps1"
+        "--rm", "$CNABImage", "/cnab/app/run"
     )
 
     docker run $dockerRunArgs
