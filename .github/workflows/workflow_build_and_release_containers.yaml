@@ -63,12 +63,13 @@ jobs:
       - name: Create Octo Release if main or deploy to sandbox label present
         if: env.SHOULD_CREATE_RELEASE == 'true'
         run: |
-          octoSpaceId="Teams"
+          octoSpaceId="Default"
           octoProjectId="Opserver"
 
           dotnet octo create-release --project=$octoProjectId --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
           --gitRef=main --server=${{ vars.OCTOPUS_CLOUD_URL }} --apiKey=${{ secrets.OCTOPUS_CLOUD_API_KEY }}
           # Note: The gitRef param is for the Octo config repo and not the git repo for the code
+          
       - name: Deploy via Octopus if main or deploy to ascn-dev if label present
         if: env.SHOULD_CREATE_RELEASE == 'true'
         run: |
@@ -78,4 +79,4 @@ jobs:
 
           dotnet octo deploy-release --project=$octoProjectId --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
           --server=${{ vars.OCTOPUS_CLOUD_URL }} --apiKey=${{ secrets.OCTOPUS_CLOUD_API_KEY }} --deployTo=$environmentId
-          # Note: The gitRef param is for the Octo config repo and not the git repo for the code          
+          # Note: The gitRef param is for the Octo config repo and not the git repo for the code
