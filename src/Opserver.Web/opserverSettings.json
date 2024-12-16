@@ -42,7 +42,7 @@
       //  {
       //    "name": "Local",
       //    "queryTimeoutMs": 2000,
-      //    "connectionString": "Server=.;Database=Local.Exceptions;Integrated Security=SSPI;"
+      //    "connectionString": "Server=.;Database=Local.Exceptions;Integrated Security=SSPI;TrustServerCertificate=True"
       //  }
       //],
       "stackTraceReplacements": [

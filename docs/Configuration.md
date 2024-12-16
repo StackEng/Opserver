@@ -319,7 +319,7 @@ Exceptions from a [StackExchange.Exceptional](https://nickcraver.com/StackExchan
       "queryTimeoutMs": 2000, // (Optional - default: 30000) The query timeout before giving up on this store (when shit hits the fan...maybe a store isn't available)
       "pollIntervalSeconds": 30, // (Optional - default: 300) How often to poll this store for new/changed exceptions
       // SQL Server connection string to the Exceptional store
-      "connectionString": "Server=ny-sql01;Database=NY.Exceptions;Integrated Security=SSPI;"
+      "connectionString": "Server=ny-sql01;Database=NY.Exceptions;Integrated Security=SSPI;TrustServerCertificate=True"
     }
   ],
   /* (Optional) Replacements for Stack Trace descriptions. It's general purpose with specific uses in mind.
