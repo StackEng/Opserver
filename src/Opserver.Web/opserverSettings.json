@@ -7,7 +7,7 @@
   "Modules": {
     /* Configuration for the SQL Server dashboard */
     "Sql": {
-      //"defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
+      //"defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;TrustServerCertificate=True",
       //"refreshIntervalSeconds": 30,
       //"instances": [
       //  { "name": "localhost" }
