@@ -197,7 +197,7 @@ The dashboard can currently monitor via SignalFx, Bosun, Orion or limited amount
     /* If using Orion, a host (for links, not API) and a connection string needs to be provided */
     //"orion": {
     //  "host": "orion.mydomain.com",
-    //  "connectionString": "Data Source=ny-orionsql01;Initial Catalog=SolarWindsOrion;Integrated Security=SSPI;Timeout=10"
+    //  "connectionString": "Data Source=ny-orionsql01;Initial Catalog=SolarWindsOrion;Integrated Security=SSPI;Timeout=10;TrustServerCertificate=True"
     //}
   },
   /* General dashboard UI settings */
@@ -319,7 +319,7 @@ Exceptions from a [StackExchange.Exceptional](https://nickcraver.com/StackExchan
       "queryTimeoutMs": 2000, // (Optional - default: 30000) The query timeout before giving up on this store (when shit hits the fan...maybe a store isn't available)
       "pollIntervalSeconds": 30, // (Optional - default: 300) How often to poll this store for new/changed exceptions
       // SQL Server connection string to the Exceptional store
-      "connectionString": "Server=ny-sql01;Database=NY.Exceptions;Integrated Security=SSPI;"
+      "connectionString": "Server=ny-sql01;Database=NY.Exceptions;Integrated Security=SSPI;TrustServerCertificate=True"
     }
   ],
   /* (Optional) Replacements for Stack Trace descriptions. It's general purpose with specific uses in mind.
@@ -494,7 +494,7 @@ Because AlwaysOn AGs can get into a state where the master does not know about t
 {
   // (Optional) The default connection string used unless specifically provided on a node
   // $ServerName$ gets replaces with the name property of the instance
-  "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
+  "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;TrustServerCertificate=True",
   "refreshIntervalSeconds": 30, // (Optional - default: 60) How often to poll all servers
   "clusters": [ // (Optional) Always On Availability Group Clusters
     {
@@ -510,7 +510,7 @@ Because AlwaysOn AGs can get into a state where the master does not know about t
   "instances": [ // (Optional) Standalone instances
     { // An example with all the options configured
       "name": "NY-DB05",
-      "connectionString": "Data Source=NY-DB05;Initial Catalog=bob;Integrated Security=SSPI;",
+      "connectionString": "Data Source=NY-DB05;Initial Catalog=bob;Integrated Security=SSPI;TrustServerCertificate=True",
       "refreshIntervalSeconds": 200
     },
     // Some standalone servers (default instance) using default refresh and connection strings:

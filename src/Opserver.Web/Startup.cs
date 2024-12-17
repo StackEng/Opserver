@@ -166,7 +166,7 @@ namespace Opserver
                         foreach (var knownNetwork in knownNetworks)
                         {
                             var ipNet = IPNet.Parse(knownNetwork);
-                            options.KnownNetworks.Add(new IPNetwork(ipNet.IPAddress, ipNet.CIDR));
+                            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(ipNet.IPAddress, ipNet.CIDR));
                         }
                     }
                 }

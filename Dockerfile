@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Global
@@ -22,7 +22,7 @@ WORKDIR /app/src/Opserver.Web
 RUN dotnet publish -c Release -o publish
 
 # Build runtime image
-FROM cr.stackoverflow.software/so-aspnet:6.0-jammy-chiseled-extra AS base
+FROM cr.stackoverflow.software/so-aspnet:8.0-jammy-chiseled-extra AS base
 
 USER $APP_UID
 
