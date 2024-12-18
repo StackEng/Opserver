@@ -9,9 +9,9 @@ param (
     [string]
     $Target = "GCP",
     [bool]
-    $DownloadLocalScriptsForLocalDebugging = $false,
+    $DownloadLocalScriptsForLocalDebugging = $true,
     [string]
-    $Version = "2024.11.20.122",
+    $Version = "pr-21",
     [string]
     $PathToDeploymentPipelineVariables = "file:///D:/code/deployment-pipeline-variables"
 )
