@@ -4,12 +4,16 @@ param (
     [string]
     $Action = "install",
     [bool]
-    $RunAsContainer = $false,
+    $RunAsContainer = $true,
     [ValidateSet("GCP", "DockerDesktop")]
     [string]
     $Target = "GCP",
     [bool]
-    $DownloadLocalScriptsForLocalDebugging = $true
+    $DownloadLocalScriptsForLocalDebugging = $true,
+    [string]
+    $Version = "pr-21",
+    [string]
+    $PathToDeploymentPipelineVariables = "file:///D:/code/deployment-pipeline-variables"
 )
 
 # Function to check if a command exists
@@ -65,14 +69,23 @@ function Setup-DockerDesktop {
     }
 }
 
-$MetaJsonPath = "$PSScriptRoot/app/variables.$Target.json"
+$env:PIPELINE_CONFIG_URI=$PathToDeploymentPipelineVariables
+
+Write-Host "Rendering pipeline variables for CNAB"
+$TempFilePath = [System.IO.Path]::GetTempFileName()
+$MetaJsonPath = [System.IO.Path]::ChangeExtension($TempFilePath, ".json")
+
+pipeline-variables render "opserver" --cloud "gcp" --product "pubplat" --env "dev" --deployment-group "ascn" --output $MetaJsonPath --json
 
 if (-not (Test-Path $MetaJsonPath)) {
-    Write-Error "File not found: $MetaJsonPath"
+    Write-Error "File not found: $MetaJsonPath. Something went wrong rendering pipeline variables."
     exit 1
 }
 
 if ($Target -eq "DockerDesktop") {
+
+    Write-Error "Docker Desktop is currently not supported for CNAB v2. For now, please target GCP until we've added back support for Docker Desktop"
+    exit 1
     Setup-DockerDesktop
  
      # Build local app images for Docker Desktop
@@ -115,7 +128,7 @@ if ($RunAsContainer) {
     
     $CNABImage = "$appName-cnab:local"
     # Build a local copy of CNAB image
-    docker build -t $CNABImage -f $PSScriptRoot/build/Dockerfile .
+    docker build -t $CNABImage -f $PSScriptRoot/build/Dockerfile --build-arg BUNDLE_VERSION=$Version  .
 
     $dockerRunArgs = @()
 
@@ -128,8 +141,6 @@ if ($RunAsContainer) {
         )
     }
     elseif ($Target -eq "DockerDesktop") {
-
-    
         if ($IsWindows) {
             $kubeConfigPath = "$env:USERPROFILE\.kube\config"
         }
@@ -147,7 +158,7 @@ if ($RunAsContainer) {
         "-v", "$($MetaJsonPath):/variables.json",
         "--env", "CNAB_ACTION=$Action",
         "--env", "INSTALLATION_METADATA=/variables.json",
-        "--rm", "$CNABImage", "/cnab/app/run.ps1"
+        "--rm", "$CNABImage", "/cnab/app/run"
     )
 
     docker run $dockerRunArgs
@@ -156,7 +167,8 @@ else {
 
     $env:CNAB_ACTION = $Action
     $env:INSTALLATION_METADATA = $MetaJsonPath
-    
+    $env:BUNDLE_VERSION = $Version
+
     if ($DownloadLocalScriptsForLocalDebugging) {
         # Read the CNAB base image from the Dockerfile
         $DockerfilePath = "$PSScriptRoot/build/Dockerfile"

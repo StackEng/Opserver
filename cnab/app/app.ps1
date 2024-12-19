@@ -11,12 +11,12 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
     Write-MajorStep "Generating Helm values"
     $values = @{
         tier                    = $environment
-        replicaCount            = $vars.vars.replicaCount
-        aspnetcoreEnvironment   = $vars.vars.aspnetcoreEnvironment
+        replicaCount            = $vars.replicaCount
+        aspnetcoreEnvironment   = $vars.aspnetcoreEnvironment
         product                 = "pubplat"
 
         db                      = @{
-            exceptionalDbName = $vars.vars.exceptionalDbName;
+            exceptionalDbName = $vars.exceptionalDbName;
         }
         
         images                  = @{
@@ -27,27 +27,27 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         }
 
         requests                = @{
-            cpu    = $vars.vars.requestsCPU
-            memory = $vars.vars.requestsMemory
+            cpu    = $vars.requestsCPU
+            memory = $vars.requestsMemory
         }
 
         limits                  = @{
-            memory = $vars.vars.limitsMemory
+            memory = $vars.limitsMemory
         }
 
         podDisruptionBudget     = @{
-            minAvailable = $vars.vars.podDisruptionBudgetMinAvailable
+            minAvailable = $vars.podDisruptionBudgetMinAvailable
         }
 
         exceptional             = @{
             store = @{
-                type = $vars.vars.exceptionalStoreType
+                type = $vars.exceptionalStoreType
             }
         }
 
         datadog                 = @{
-            agentHost = $vars.vars.datadogAgentHost
-            agentPort = $vars.vars.datadogAgentPort
+            agentHost = $vars.datadogAgentHost
+            agentPort = $vars.datadogAgentPort
         }
         
         kestrel                 = @{
@@ -60,7 +60,7 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         }
 
         secretStore             = @{
-            fake = $vars.runtime.local
+            fake = $vars.useFakeSecretStore
         }
 
         image                   = @{
@@ -70,23 +70,23 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         ingress                 = @{
             className     = "nginx-internal"
             certIssuer    = "letsencrypt-dns-prod"
-            host          = $vars.vars.opserverSettings.hostUrl
-            enabled       = $vars.vars.includeIngress
+            host          = $vars.opserverSettings.hostUrl
+            enabled       = $vars.includeIngress
             secretName    = "opserver-tls"
             createTlsCert = $true
         }
 
         sqlExternalSecret       = @{
-            storeRefName = $vars.vars.secretStore
+            storeRefName = $vars.secretStore
         }
 
         opserverExternalSecret  = @{
-            storeRefName = $vars.vars.secretStore
+            storeRefName = $vars.secretStore
         }
 
-        opserverSettings        = $vars.vars.opserverSettings
+        opserverSettings        = $vars.opserverSettings
 
-        adminRolebindingGroupId = $vars.vars.adminRolebindingGroupId
+        adminRolebindingGroupId = $vars.adminRolebindingGroupId
     }
     
     # Helm expects a YAML file but YAML is also a superset of JSON, so we can use ConvertTo-Json here

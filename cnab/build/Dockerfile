@@ -1,7 +1,9 @@
-FROM cr.stackoverflow.software/so-pubplat-cnab:2024.10.16.174409-276.1@sha256:36cf26cd2d2ea251ce46edcc966174ab1ed95ccf2818cdc763ba58a384328177
+FROM crdev.stackoverflow.software/so-pubplat-cnab:2024.12.19.105621-prerelease@sha256:06e1f1006bcfc6f05d90634225af23b7e99b7faea50c967e5bd50c3cf4ce5dae
     
 COPY ./cnab/app /cnab/app
 COPY ./charts /cnab/app/charts
-RUN chmod 755 /cnab/app/run.ps1
 
-CMD ["/cnab/app/run.ps1"]
+ARG BUNDLE_VERSION
+ENV BUNDLE_VERSION=${BUNDLE_VERSION}
+
+CMD ["/cnab/app/run"]

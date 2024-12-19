@@ -25,42 +25,42 @@ inputs:
     required: false
     default: ''
 
-
 runs:
   using: composite
   steps:
-    - name: Setup up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+  - name: Setup up Docker Buildx
+    uses: docker/setup-buildx-action@v3
 
-    - name: Docker Image Metadata
-      id: metadata
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ inputs.image_name }}
-        # https://github.com/docker/metadata-action/tree/master?tab=readme-ov-file#priority-attribute
-        # The default priority of sha is 100, and for custom/raw tags is 200. The highest the most priority.
-        # We want the sha tag to be the one used for the OCI label and the version output, so we set the priority of the custom date tag to the lowest.
-        tags: |
-          type=sha,priority=100
-          ${{ inputs.version }},priority=1
-          type=ref,event=pr
-        flavor: latest=false
+  - name: Docker Image Metadata
+    id: metadata
+    uses: docker/metadata-action@v5
+    with:
+      images: ${{ inputs.image_name }}
+      # https://github.com/docker/metadata-action/tree/master?tab=readme-ov-file#priority-attribute
+      # The default priority of sha is 100, and for custom/raw tags is 200. The highest the most priority.
+      # We want the sha tag to be the one used for the OCI label and the version output, so we set the priority of the custom date tag to the lowest.
+      tags: |
+        type=sha,priority=100
+        ${{ inputs.version }},priority=1
+        type=ref,event=pr
+      flavor: latest=false
 
-    - name: Login to Docker Registry - prod
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ inputs.registry_prod }}
-        username: ${{ inputs.registry_username }}
-        password: ${{ inputs.registry_password }}
-
-    - name: Build Image
-      uses: docker/build-push-action@v6
-      with:
-        push: true
-        context: .
-        file: ${{ inputs.dockerfile_path }}
-        tags: ${{ steps.metadata.outputs.tags }}
-        labels: ${{ steps.metadata.outputs.labels }}
-        provenance: true
-        build-args: |
-          DOTNET_VERSION=${{ env.DOTNET_VERSION }}
+  - name: Login to Docker Registry - prod
+    uses: docker/login-action@v3
+    with:
+      registry: ${{ inputs.registry_prod }}
+      username: ${{ inputs.registry_username }}
+      password: ${{ inputs.registry_password }}
+      
+  - name: Build Image
+    uses: docker/build-push-action@v6
+    with:
+      push: true
+      context: .
+      file: ${{ inputs.dockerfile_path }}
+      tags: ${{ steps.metadata.outputs.tags }}
+      labels: ${{ steps.metadata.outputs.labels }}
+      provenance: true
+      build-args: |
+        DOTNET_VERSION=${{ env.DOTNET_VERSION }}
+        BUNDLE_VERSION=${{ inputs.version }}
