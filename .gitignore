@@ -1,4 +1,5 @@
 # These get copied locally when running Invoke-CNAB not in a container
+# Temporarily including these while building out CNAB v2 support
 cnab/app/container-registry-discovery.ps1
 cnab/app/gcp-cluster-discovery.ps1
 cnab/app/run.ps1
