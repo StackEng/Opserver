@@ -47,38 +47,35 @@ jobs:
   create_release:
     needs: [build_docker, build_cnab, generate_date_version]
     runs-on: ubuntu-latest
+    if: github.ref_name == 'main' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-to-ascn-dev'))
     steps:
-      - name: Install octopus .NET tool
-        run: |
-          dotnet tool install --global Octopus.DotNet.Cli --version 9.1.7
-          dotnet octo --version
-      - name: determine if we should create release and deploy
-        id: should-create-release
-        run: |
-          if [[ ${{ github.ref_name == 'main' || github.pull_request.labels.*.name == 'deploy-to-ascn-dev' }} ]]; then
-            echo "SHOULD_CREATE_RELEASE=true" >> $GITHUB_ENV
-          else
-            echo "SHOULD_CREATE_RELEASE=false" >> $GITHUB_ENV
-          fi
+      - name: Install Octopus CLI 🐙
+        uses: OctopusDeploy/install-octopus-cli-action@v3
 
-      - name: Create Octo Release if main or deploy to sandbox label present
-        # if: env.SHOULD_CREATE_RELEASE == 'true'
+      - name: Create Octopus release
+        shell: bash
+        env:
+          OCTOPUS_URL: ${{ vars.OCTOPUS_CLOUD_URL }}
+          OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_CLOUD_API_KEY }}
         run: |
-          octoSpaceId="Default"
-          octoProjectId="opserver"
-
-          dotnet octo create-release --project=$octoProjectId --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
-            --server=${{ vars.OCTOPUS_CLOUD_URL }} --apiKey=${{ secrets.OCTOPUS_CLOUD_API_KEY }}
-          
-          
-      - name: Deploy via Octopus if main or deploy to ascn-dev if label present
-        # if: env.SHOULD_CREATE_RELEASE == 'true'
+          echo "Generating release notes"
+          cat<<EOF > release-notes.md
+          ${{ github.event.head_commit.message }}
+          [$GITHUB_SHA]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/commit/$GITHUB_SHA)
+          [GitHub workflow run #$GITHUB_RUN_ID]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)
+          EOF
+          echo "Creating release for OpServer"
+          octopus release create --space Default --project "OpServer" \
+             --version="${{ needs.generate_date_version.outputs.version }}" \
+             --release-notes-file release-notes.md
+      - name: Deploy Octopus release
+        shell: bash
+        env:
+          OCTOPUS_URL: ${{ vars.OCTOPUS_CLOUD_URL }}
+          OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_CLOUD_API_KEY }}
         run: |
-          octoSpaceId="Default"
-          octoProjectId="opserver"
           environmentId="${{ github.ref_name == 'main' && 'test' || 'dev' }}"
           tenantId="${{ github.ref_name == 'main' && 'main' || 'ascn' }}"
 
-          dotnet octo deploy-release --project=$octoProjectId --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
-            --server=${{ vars.OCTOPUS_CLOUD_URL }} --apiKey=${{ secrets.OCTOPUS_CLOUD_API_KEY }} --deployTo=$environmentId --tenant=$tenantId
-          
+          echo "Deploying release to $environmentId"
+          octopus release deploy --space Default --project "OpServer" --version "${{ needs.generate_date_version.outputs.version }}" --deployTo=$environmentId --tenant=$tenantId
