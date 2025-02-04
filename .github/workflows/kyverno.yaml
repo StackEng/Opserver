@@ -1,0 +1,11 @@
+name: Kyverno
+
+on:
+  pull_request:
+
+jobs:
+    kyverno:
+      uses: StackEng/CoreEngineering.CITools/.github/workflows/reusable_workflow_kyverno_policy_validation.yml@main
+      with:
+        charts: '["opserver"]'
+      secrets: inherit
