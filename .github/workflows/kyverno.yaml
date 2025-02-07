@@ -1,3 +1,7 @@
+# This workflow is copied directly from https://github.com/StackEng/CoreEngineering.CITools/blob/main/.github/workflows/reusable_workflow_kyverno_policy_validation.yml
+# The only change is to set the chart name to opserver for the matrix strategy
+# Because OpServer is a fork from the public repo we can not use shared actions from within our GitHub organization
+
 name: Kyverno
 
 on:
@@ -5,7 +9,43 @@ on:
 
 jobs:
     kyverno:
-      uses: StackEng/CoreEngineering.CITools/.github/workflows/reusable_workflow_kyverno_policy_validation.yml@main
-      with:
-        charts: '["opserver"]'
-      secrets: inherit
+      runs-on: ubuntu-latest
+      name: Kyverno
+      strategy:
+        fail-fast: false
+        matrix:
+          chart: ["opserver"]
+      steps:
+        # Only checkout the charts directory from the source repo
+        - uses: actions/checkout@v4
+          with:
+            sparse-checkout: 'charts'
+            sparse-checkout-cone-mode: false
+          
+        - uses: actions/checkout@v4
+          name: Checkout kyverno-policies
+          with:
+            repository: stackeng/kyverno-policies
+            ref: main
+            path: kyverno-policies
+            token: ${{ secrets.SVC_GITHUBRO_PAT }}
+
+        - name: Install Kyverno
+          uses: kyverno/action-install-cli@v0.2.0
+          with:
+            release: 'v1.9.5'
+
+        - name: Install Helm
+          uses: azure/setup-helm@v4
+
+        - name: Build Helm Dependencies
+          run: |
+            helm dependency build ./charts/${{ matrix.chart }}
+
+        - name: Kyverno Remove policies with apiCall
+          run: |
+            grep -lrIZ "apiCall:" ./kyverno-policies/baseline-policies | xargs -0 rm -f --              
+        
+        - name: Kyverno Test against Policies
+          run: |
+            helm template ./charts/${{ matrix.chart }} --namespace ${{ matrix.chart }} --set images.sqlmigrations.tag=notlatest --set images.${{ matrix.chart }}.tag=notlatest | kyverno apply ./kyverno-policies/baseline-policies --resource -
