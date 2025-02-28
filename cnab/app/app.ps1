@@ -1,4 +1,4 @@
-function Get-AppName() {  
+function Get-AppName() {
     $app = 'opserver'
     return $app
 }
@@ -7,7 +7,7 @@ function Is-SingleRegistry() {
     return $True
 }
 
-function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag, $pullSecretName) {  
+function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag, $pullSecretName) {
     Write-MajorStep "Generating Helm values"
     $values = @{
         tier                    = $environment
@@ -18,7 +18,7 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         db                      = @{
             exceptionalDbName = $vars.exceptionalDbName;
         }
-        
+
         images                  = @{
             containerRegistry = "$containerRegistryUrl"
             opserver          = @{
@@ -49,7 +49,7 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
             agentHost = $vars.datadogAgentHost
             agentPort = $vars.datadogAgentPort
         }
-        
+
         kestrel                 = @{
             endPoints = @{
                 http = @{
@@ -80,6 +80,10 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
             storeRefName = $vars.secretStore
         }
 
+        configSecret       = @{
+            storeRefName = $vars.secretStore
+        }
+
         opserverExternalSecret  = @{
             storeRefName = $vars.secretStore
         }
@@ -88,7 +92,7 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
 
         adminRolebindingGroupId = $vars.adminRolebindingGroupId
     }
-    
+
     # Helm expects a YAML file but YAML is also a superset of JSON, so we can use ConvertTo-Json here
     $valuesFileContent = $values | ConvertTo-Json -Depth 100
     Write-MinorStep "Populated Helm values:"
