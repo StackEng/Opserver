@@ -76,3 +76,13 @@ sqlExternalSecret:
     exceptionalPassword: db-Exceptions-Password
 
 nodeScheduling: {}
+
+configSecret:
+  name: opserver-config
+  refreshInterval: 5m
+  storeRefName: fakeopserversecretstore
+  targetName: opserver-config
+  remoteRefs:
+    ElasticSettings: opserver-elastic-config
+    RedisSettings: opserver-redis-config
+    SQLSettings: opserver-sql-config

@@ -35,6 +35,8 @@ spec:
         volumeMounts:
         - name: writable-tmp #need our own read-write enabled temp directory because aspnet spills large requests over to disk
           mountPath: /mnt/tmp
+        - name: opserver-config
+          mountPath: /app/Config
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.kestrel.endPoints.http.containerPort }}
@@ -53,10 +55,6 @@ spec:
           initialDelaySeconds: 10
           periodSeconds: 1
           successThreshold: 3
-        volumeMounts:
-        - name: writable-tmp
-          mountPath: /mnt/tmp
-          
         env:
         - name: NODE_IP
           valueFrom:
@@ -134,10 +132,10 @@ spec:
         - name: Security__Scopes__1
           value: "groups"
         - name: Security__Scopes__2
-          value: "profile"          
+          value: "profile"
 {{- end }}
 
-      {{- if hasKey .Values.opserverSettings "sql" }}      
+      {{- if hasKey .Values.opserverSettings "sql" }}
         - name: SQL_STATUS_SERVERNAME
           valueFrom:
             secretKeyRef:
@@ -164,7 +162,7 @@ spec:
         {{- end }}
       {{- end }}
 
-      {{- if hasKey .Values.opserverSettings "exceptions" }}      
+      {{- if hasKey .Values.opserverSettings "exceptions" }}
         - name: SQL_EXCEPTIONAL_USERNAME
           valueFrom:
             secretKeyRef:
@@ -214,10 +212,10 @@ spec:
         - key: {{ .key }}
           operator: {{ .operator }}
           value: {{ .value | quote }}
-          effect: {{ .effect }}        
+          effect: {{ .effect }}
         {{- end }}
-      {{- end }}      
-     
+      {{- end }}
+
       restartPolicy: Always
       imagePullSecrets:
       - name: "{{ .Values.image.pullSecretName }}"
@@ -229,3 +227,6 @@ spec:
       volumes:
       - name: writable-tmp
         emptyDir: {}
+      - name: opserver-config
+        secret:
+          secretName: {{ .Values.configSecret.targetName }}
