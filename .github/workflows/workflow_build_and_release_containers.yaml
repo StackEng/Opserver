@@ -73,7 +73,7 @@ jobs:
           octoSpaceId="Default"
           octoProjectId="opserver"
 
-          octopus release create --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} $octoProjectId
+          octopus release create -p $octoProjectId -s $octoSpaceId -v "${{ needs.generate_date_version.outputs.version }}"
 
 
       - name: Deploy via Octopus if main or deploy to ascn-dev if label present
@@ -87,5 +87,5 @@ jobs:
           environmentId="${{ github.ref_name == 'main' && 'test' || 'dev' }}"
           tenantId="${{ github.ref_name == 'main' && 'main' || 'ascn' }}"
 
-          octopus release deploy --space=$octoSpaceId --version=${{ needs.generate_date_version.outputs.version }} \
-          --environment=$environmentId --tenant=$tenantId $octoProjectId
+          octopus release deploy -p $octoProjectId -s $octoSpaceId --version "${{ needs.generate_date_version.outputs.version }}" \
+          -e $environmentId --tenant $tenantId
