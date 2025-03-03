@@ -135,12 +135,6 @@ spec:
           value: "profile"
 {{- end }}
 
-        - name: SQL_STATUS_SERVERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusSqlServerName }}
-
         - name: SQL_STATUS_USERNAME
           valueFrom:
             secretKeyRef:
@@ -153,7 +147,7 @@ spec:
               key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusPassword }}
 
         - name: Modules__Sql__defaultConnectionString
-          value: "Server=$(SQL_STATUS_SERVERNAME);Database=master;User ID=$(SQL_STATUS_USERNAME);Password=$(SQL_STATUS_PASSWORD);TrustServerCertificate=True"
+          value: "Server=$ServerName$;Database=master;User ID=$(SQL_STATUS_USERNAME);Password=$(SQL_STATUS_PASSWORD);TrustServerCertificate=True"
 
       {{- if hasKey .Values.opserverSettings "exceptions" }}
         - name: SQL_EXCEPTIONAL_USERNAME
