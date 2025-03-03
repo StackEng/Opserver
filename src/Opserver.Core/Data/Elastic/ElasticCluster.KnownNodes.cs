@@ -36,7 +36,6 @@ namespace Opserver.Data.Elastic
                     Url = uri.ToString();
                     Host = uri.Host;
                     Port = uri.Port;
-                    new OpserverConfigException($"Inside Uri.TryCreate: {Url}, {Host}, {Port}").Log();
                     return;
                 }
 
