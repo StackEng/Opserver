@@ -60,7 +60,15 @@ namespace Opserver.Data.Elastic
                     Host = hostAndPort;
                     Port = DefaultElasticPort;
                 }
-                Url = $"http://{Host}:{Port}/";
+
+                if (Port == 443)
+                {
+                    Url = $"https://{Host}/";
+                }
+                else
+                {
+                    Url = $"http://{Host}:{Port}/";
+                }
             }
 
             public override string ToString() => Host;
