@@ -31,7 +31,7 @@ namespace Opserver.Data.Elastic
             public ElasticNode(string hostAndPort, ElasticSettings.Cluster clusterSettings)
             {
                 ClusterSettings = clusterSettings;
-                if (Uri.TryCreate(hostAndPort, UriKind.Absolute, out var uri))
+                if (hostAndPort[^3..] != "443" && Uri.TryCreate(hostAndPort, UriKind.Absolute, out var uri))
                 {
                     Url = uri.ToString();
                     Host = uri.Host;
