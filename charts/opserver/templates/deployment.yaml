@@ -135,6 +135,22 @@ spec:
           value: "profile"
 {{- end }}
 
+        - name: SQL_STATUS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusUsername }}
+              
+        - name: SQL_STATUS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.sqlExternalSecret.targetName }}
+              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusPassword }}
+
+        - name: Modules__Sql__defaultConnectionString
+          value: "Server=$ServerName$;Database=master;User ID=$(SQL_STATUS_USERNAME);Password=$(SQL_STATUS_PASSWORD);TrustServerCertificate=True;MultiSubnetFailover=True"
+
+
       {{- if hasKey .Values.opserverSettings "exceptions" }}
         - name: SQL_EXCEPTIONAL_USERNAME
           valueFrom:
