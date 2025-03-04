@@ -135,20 +135,6 @@ spec:
           value: "profile"
 {{- end }}
 
-        - name: SQL_STATUS_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusUsername }}
-        - name: SQL_STATUS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.sqlExternalSecret.targetName }}
-              key: {{ .Values.sqlExternalSecret.remoteRefs.sqlStatusPassword }}
-
-        - name: Modules__Sql__defaultConnectionString
-          value: "Server=$ServerName$;Database=master;User ID=$(SQL_STATUS_USERNAME);Password=$(SQL_STATUS_PASSWORD);TrustServerCertificate=True"
-
       {{- if hasKey .Values.opserverSettings "exceptions" }}
         - name: SQL_EXCEPTIONAL_USERNAME
           valueFrom:
@@ -163,7 +149,7 @@ spec:
 
         {{- range $i, $instance := .Values.opserverSettings.exceptions }}
         - name: Modules__Exceptions__stores__{{ $i }}__connectionString
-          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);TrustServerCertificate=True"
+          value: "Server={{ $instance.serverName}};Database={{ $instance.database}};User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);TrustServerCertificate=True;MultiSubnetFailover=True"
         {{- end }}
 
         - name: SQL_EXCEPTIONAL_SERVERNAME
@@ -173,7 +159,7 @@ spec:
               key: {{ .Values.sqlExternalSecret.remoteRefs.exceptionalServerName }}
 
         - name: EXCEPTIONAL__STORE__CONNECTIONSTRING
-          value: Server=$(SQL_EXCEPTIONAL_SERVERNAME),1433;Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
+          value: Server=$(SQL_EXCEPTIONAL_SERVERNAME);Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
       {{- end }}
 
       topologySpreadConstraints:
