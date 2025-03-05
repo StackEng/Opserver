@@ -90,6 +90,9 @@ spec:
         - name: DD_SERVICE
           value: "opserver"
 
+        - name: DD_VERSION
+          value: {{ .Values.images.opserver.tag | quote }}
+
         - name: KESTREL__ENDPOINTS__HTTP__URL
           value: "http://0.0.0.0:{{ .Values.kestrel.endPoints.http.containerPort }}/"
 
