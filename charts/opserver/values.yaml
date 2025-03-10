@@ -75,7 +75,8 @@ sqlExternalSecret:
     exceptionalUsername: db-Exceptions-User
     exceptionalPassword: db-Exceptions-Password
 
-nodeScheduling: {}
+nodeScheduling: 
+  scheduleOnSeparateNodes: false
 
 configSecret:
   name: opserver-config
