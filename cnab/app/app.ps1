@@ -93,6 +93,11 @@ function Generate-Values($vars, $environment, $containerRegistryUrl, $releaseTag
         adminRolebindingGroupId = $vars.adminRolebindingGroupId
     }
 
+    nodeScheduling = @{
+        # change to false if deploying locally to docker, or uninstall before installing the app to prevent node affinity issues
+        scheduleOnSeparateNodes = $true
+    }
+
     # Helm expects a YAML file but YAML is also a superset of JSON, so we can use ConvertTo-Json here
     $valuesFileContent = $values | ConvertTo-Json -Depth 100
     Write-MinorStep "Populated Helm values:"

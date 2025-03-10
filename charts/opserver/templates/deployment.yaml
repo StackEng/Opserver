@@ -181,6 +181,19 @@ spec:
           value: Server=$(SQL_EXCEPTIONAL_SERVERNAME);Database={{ .Values.db.exceptionalDbName }};Persist Security Info=False;User ID=$(SQL_EXCEPTIONAL_USERNAME);Password=$(SQL_EXCEPTIONAL_PASSWORD);MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultiSubnetFailover=True
       {{- end }}
 
+      {{- if .Values.nodeScheduling.scheduleOnSeparateNodes  }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: service
+                    operator: In
+                    values: 
+                      - {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
