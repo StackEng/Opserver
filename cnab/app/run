@@ -1,7 +1,0 @@
-#!/bin/bash
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
-IFS=$'\n\t'
-
-# Execute powershell command from a file
-pwsh -File cnab/app/run.ps1
